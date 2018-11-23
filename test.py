@@ -1,6 +1,3 @@
-from kivy.properties import BooleanProperty
-
-from kivy.lang import Builder
 from kivy.app import App
 
 from kivy.config import Config
@@ -11,12 +8,6 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 
-kv = """
-
-"""
-
-Builder.load_string(kv)
-
 class TicTacToeApp(App):
     title = 'Tic Tac Toe'
     board = []
@@ -25,6 +16,8 @@ class TicTacToeApp(App):
     cols = rows = 3
     count_xo = 0  # มีไว้สำหรับเช็ค ช่องในตาราง เพื่อทำเงื่อนไขเสมอกัน
     win = False
+    label = Label()
+    textInput = TextInput()
 
     def build(self):
         # ตั้งค่าขนาดหน้าต่าง
@@ -35,18 +28,21 @@ class TicTacToeApp(App):
 
         root = BoxLayout(orientation="vertical")
         grid = GridLayout(cols=self.cols, rows=self.rows, spacing=5)
-        textInput = TextInput(id='entry')
+    
         pushButton = Button(text='Selected')
+        pushButton.bind(
+            on_press = self.on_selected
+        )
         # pushButton.bind(on_release=self.on_press(textInput.entry.text))
 
         inputGridLayout = GridLayout(
             cols=2, rows=1, spacing=5, size_hint_y=None)
-        inputGridLayout.add_widget(textInput)
+        inputGridLayout.add_widget(self.textInput)
         inputGridLayout.add_widget(pushButton)
         root.add_widget(inputGridLayout)
         self.board = [[None for col in range(self.cols)] for row in range(
             self.rows)]  # สร้างตารางซึ่งเป็น array 2 มิติ สำหรับเก็บ x,o ไว้
-        print(self.board)
+        # print(self.board)
         for row in range(self.rows):
             for col in range(self.cols):
                 bt = Button(
@@ -76,32 +72,33 @@ class TicTacToeApp(App):
         )
         return root
 
-    def on_press(self, input):
-        if input == '1':
+    def on_selected(self,bt):
+        
+        if self.textInput.text == '1':
             self.board[0][0].disabled = True
             self.board[0][0].text = self.choice[self.switch]
-        elif input == '2':
+        elif self.textInput.text == '2':
             self.board[0][1].disabled = True
             self.board[0][1].text = self.choice[self.switch]
-        elif input == '3':
+        elif self.textInput.text == '3':
             self.board[0][2].disabled = True
             self.board[0][2].text = self.choice[self.switch]
-        elif input == '4':
+        elif self.textInput.text == '4':
             self.board[1][0].disabled = True
             self.board[1][0].text = self.choice[self.switch]
-        elif input == '5':
+        elif self.textInput.text == '5':
             self.board[1][1].disabled = True
             self.board[1][1].text = self.choice[self.switch]
-        elif input == '6':
+        elif self.textInput.text == '6':
             self.board[1][2].disabled = True
             self.board[1][2].text = self.choice[self.switch]
-        elif input == '7':
+        elif self.textInput.text == '7':
             self.board[2][0].disabled = True
             self.board[2][0].text = self.choice[self.switch]
-        elif input == '8':
+        elif self.textInput.text == '8':
             self.board[2][1].disabled = True
             self.board[2][1].text = self.choice[self.switch]
-        elif input == '9':
+        elif self.textInput.text == '9':
             self.board[2][2].disabled = True
             self.board[2][2].text = self.choice[self.switch]
         self.count_xo += 1
